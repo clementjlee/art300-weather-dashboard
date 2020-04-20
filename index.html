@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="keys.js"></script>
+<script src="https://unpkg.com/@warnick/forecast-js/js/forecast.min.js" defer></script>
+<link rel="stylesheet" href="https://unpkg.com/@warnick/forecast-js/css/forecast.css">
+<link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="results" id="app">
+        <div class="header">
+            <div class="logo"></div>
+            <div class="title"></div>
+            <input placeholder="Enter Your ZIP Code" v-on:input="zip_trigger" name="name" id="zip" />
+        </div>
+
+        <div class="time">
+            <div class="todaydatetime">
+                <h1 v-bind:class="time.day">{{time.day}}</h1>
+                <h1 class="date">{{time.date}}</h1>
+            </div>
+            <div class="currenttime">
+                <h1 class="time">{{time.hour_12}}:{{time.minute}}:{{time.seconds}} {{time.ampm}}</h1>
+            </div>
+            <div class="todaysunandmoon">
+                <div class="todaysunrise">
+                    <p>Sunrise</p>
+                    <h2 class="sunrise">{{current.sunrise}}</h2>
+                </div>
+                <div class="todaysundown">
+                    <p>Sundown</p>
+                    <h2 class="sunset">{{current.sunset}}</h2>
+                </div>
+                <div class="todaymoonphase">
+                    <p>Moon Phase</p>
+                    <h2 v-bind:class="time.moom">{{time.moom}}</h2>
+                </div>
+            </div>
+        </div>
+        
+            <div class="main">
+                <div class="location">
+                    <div class="citystate">
+                        <h1 class="city">{{location.name}}</h1>
+                        <h1 class="state">{{location.state}}</h1>
+                        <h1 class="zip">{{location.zip}}</h1>
+                    </div>
+    ____________________________________
+                    <div class="coordinates">
+                            <p class="latitude">Latitude: {{location.coord.lat}}</p>
+                            <p class="longitude">Longtitude: {{location.coord.lon}}</p>
+                    </div>
+
+                    <div class="weatheroffice">
+                        <p>
+                            National Weather Service <br/>
+                            Office Topeka, KS
+                        </p>
+                    </div>
+
+                    <p>{{error}}</p>
+                </div>
+                
+                <div class="current">
+                    <div class="currenttemperature">
+                        <div class="currenticon">
+                            <div class="icon">
+                                <img v-bind:src="  'img/' + forecast[4].description_icon + '.png'  " />
+                            </div>
+                            <div class="current2">
+                                <h1 class="degree_symbol current">{{current.temp.current}}</h1>
+                                <div class="current2-5">
+                                    <p class="description_long">{{current.description_long}}</p>
+                                    <p class="degree_symbol feelslike">Feels Like {{current.temp.feelslike}}</p>
+                                </div>
+                            </div>
+                            <div class="currentadditional">
+                                <div class="raindropicon"></div>
+                                <p class="rain">{{current.rain}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="additional">
+                        <div class="currentuvindex">
+                            <p>UV Index</p>
+                            <h1 class="uv">{{current.uv}}</h1>
+                        </div>
+                        <div class="currenthumidity">
+                            <p>Humidity</p>
+                            <h1 class="humidity">{{current.humidity}}</h1>
+                        </div>
+                        <div class="currentpressure">
+                            <p>Pressure</p>
+                            <h1 class="pressure">{{current.pressure}}</h1>
+                        </div>
+                        <div class="currentwindspeed">
+                            <p>Wind Speed</p>
+                            <h1 class="windspeed">{{current.wind.speed}}</h1>
+                        </div>
+                        <div class="currentairquality">
+                            <p>Air Quality</p>
+                            <h1 class="air_quality">{{current.air_quality}}</h1>
+                        </div>
+                        <div class="currentcloudcoverage">
+                            <p>Cloud Coverage</p>
+                            <h1 class="cloudcover">{{current.cloud_cover}}</h1>
+                        </div>
+                    </div>
+                </div>
+            <div class="nexthours">
+                <div class="list">
+                    <div class="hourtime">
+                        <h4>Time</h4>
+                    </div>
+                    <div class="hourdesc">
+                        <h4>Desc</h4>
+                    </div>
+                    <div class="hourtemp">
+                        <h4>Temp</h4>
+                    </div>
+                    <div class="hourwind">
+                        <h4>Wind</h4>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[1].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[1].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[1].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[1].windSpeed}}</p>
+                            <p>{{hourly[1].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[2].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[2].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[2].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[2].windSpeed}}</p>
+                            <p>{{hourly[2].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[3].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[3].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[3].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[3].windSpeed}}</p>
+                            <p>{{hourly[3].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[4].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[4].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[4].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[4].windSpeed}}</p>
+                            <p>{{hourly[4].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[5].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[5].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[5].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[5].windSpeed}}</p>
+                            <p>{{hourly[5].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[6].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[6].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[6].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[6].windSpeed}}</p>
+                            <p>{{hourly[6].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[7].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[7].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[7].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[7].windSpeed}}</p>
+                            <p>{{hourly[7].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="hour">
+                    <div class="hourresult">
+                        <div class="hourtime">
+                            <p>{{hourly[8].time}}</p>
+                        </div>
+                        <div class="hourdesc">
+                            <p>{{hourly[8].shortForecast}}</p>
+                        </div>
+                        <div class="hourtemp">
+                            <p class="degree_symbol">{{hourly[8].temperature}}</p>
+                        </div>
+                        <div class="hourwind">
+                            <p>{{hourly[8].windSpeed}}</p>
+                            <p>{{hourly[8].windDirection}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="forecast">
+<!--_________________DAY ONE___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[1].description_icon + '.png'" 
+                            v-bind:alt="forecast[1].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[1].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[1].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[1].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[1].weather.description }}</p>
+                        <p>Chances of Snow</p>
+                        <p>{{forecast[1].snow}}</p>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[1].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[1].wind_spd}} mph</p>
+                        <p>{{forecast[1].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[1].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[1].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[1].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[1].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY TWO___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="Dayicon">
+                            <img v-bind:src="'/img/' + forecast[2].description_icon + '.png'" 
+                            v-bind:alt="forecast[2].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[2].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[2].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[2].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[2].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[2].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[2].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[2].wind_spd}} mph</p>
+                        <p>{{forecast[2].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[2].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[2].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[2].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[2].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY THREE___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[3].description_icon + '.png'" 
+                            v-bind:alt="forecast[3].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[3].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[3].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[3].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[3].weather.description }}</p>
+                        <div class="Day3snow">
+                            <p>{{forecast[3].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[3].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[3].wind_spd}} mph</p>
+                        <p>{{forecast[3].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[3].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[3].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[3].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[3].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY FOUR___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[4].description_icon + '.png'" 
+                            v-bind:alt="forecast[4].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[4].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[4].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[4].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[4].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[4].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Day4precipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[4].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[4].wind_spd}} mph</p>
+                        <p>{{forecast[4].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[4].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[4].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[4].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[4].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY FIVE___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[5].description_icon + '.png'" 
+                            v-bind:alt="forecast[5].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[5].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[5].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[5].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[5].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[5].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[5].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[5].wind_spd}} mph</p>
+                        <p>{{forecast[5].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[5].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[5].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[5].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[5].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY SIX___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[6].description_icon + '.png'" 
+                            v-bind:alt="forecast[6].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[6].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[6].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[6].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[6].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[6].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[6].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[6].wind_spd}} mph</p>
+                        <p>{{forecast[6].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[6].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[6].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[6].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[6].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY SEVEN___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[7].description_icon + '.png'" 
+                            v-bind:alt="forecast[7].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[7].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[7].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[7].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[7].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[7].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[7].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[7].wind_spd}} mph</p>
+                        <p>{{forecast[7].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[7].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[7].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[7].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[7].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY EIGHT___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[8].description_icon + '.png'" 
+                            v-bind:alt="forecast[8].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[8].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[8].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[8].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[8].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[8].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[8].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[8].wind_spd}} mph</p>
+                        <p>{{forecast[8].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[8].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[8].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[8].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[8].vis}}</p>
+                    </div>
+                </div>
+            </div>
+<!--_________________DAY NINE___________________-->
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[9].description_icon + '.png'" 
+                            v-bind:alt="forecast[9].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[9].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[8].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[9].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[9].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[9].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[9].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[9].wind_spd}} mph</p>
+                        <p>{{forecast[9].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[9].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[9].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[9].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[9].vis}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="Day">
+                <div class="Dayrowone">
+                    <div class="Daylogo">
+                        <div class="icon">
+                            <img v-bind:src="'/img/' + forecast[10].description_icon + '.png'" 
+                            v-bind:alt="forecast[10].weather.description">
+                        </div>
+                    </div>
+                    <div class="DayWeekday">
+                        <h6>{{forecast[10].weekday}}</h6>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowtwo">
+                    <div class="Daytemperaturehigh">
+                        <p>High</p>
+                        <p  class="degree_symbol">{{forecast[10].max_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturelow">
+                        <p>Low</p>
+                        <p  class="degree_symbol">{{forecast[10].min_temp}}</p>
+                    </div>
+                    <div class="Daytemperaturedesciption">
+                        <p>{{ forecast[10].weather.description }}</p>
+                        <div class="Daysnow">
+                            <p>{{forecast[10].snow}}</p>
+                        </div>
+                    </div>
+                </div>
+                <hr/><!--____________________________________-->
+                <div class="Dayrowthree">
+                    <div class="Dayprecipitation">
+                        <p>Precipitation</p>
+                        <p>{{forecast[10].precip}}</p>
+                    </div>
+                    <div class="Daywindspeed">
+                        <p>Wind Speed</p>
+                        <p>{{forecast[10].wind_spd}} mph</p>
+                        <p>{{forecast[10].wind_cdir}}</p>
+                    </div>
+                    <div class="Daymoonphase">
+                        <p>Moon Phase</p>
+                        <p>{{forecast[10].moon}}</p>
+                    </div>
+                </div>
+                <hr/> <!--____________________________________-->
+                <div class="Dayrowfour">
+                    <div class="Daydewpoint">
+                        <p>Dew Point</p>
+                        <p>{{forecast[10].dewpt}}</p>
+                    </div>
+                    <div class="Daypressure">
+                        <p>Pressure</p>
+                        <p>{{forecast[10].pres}} mb</p>
+                    </div>
+                    <div class="Dayvisibility">
+                        <p>Visibility</p>
+                        <p>{{forecast[10].vis}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="Alert">
+            <div class="Title">
+                <h1>Freeze Warning</h1>
+                <h2>Effective from 2am to 9am CDT Friday</h2>
+            </div>
+            <div class="Subtitle">
+                <p>
+                    Sub-freezing temperatures expected, with lows falling to between 24 and 29. <br/>
+                    Portions of central, east central, north central and northeast Kansas. <br/>
+                    Take steps now to protect tender plants from the cold. To prevent <br/>
+                    freezing and possible bursting of outdoor water pipes they should <br/>
+                    be wrapped, drained, or allowed to drip slowly. Those that have <br/>
+                    in-ground sprinkler systems should drain them and cover above<br/>
+                    ground pipes to protect them from freezing.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="Radar">
+        <div class="map">
+            <div id="map"></div>
+            <script src="/js/script.js"></script>
+        </div>
+        <div class="mapscale">
+            <div class="Rain"></div>
+            <div class="Hail"></div>
+            <div class="Snow"></div>
+        </div>
+    </div>
+
+    <div class="Footer">
+        <p>Feedback Careers Press Room Advertise with Us <br/>
+        Terms of Use | Privacy Policy | Parental Controls | Ad Partners | Analytics Partners <br/>
+        © Copyright TWC Product and Technology LLC 2014, 2020
+        </p>
+    </div>
+
+</body>
+</html>

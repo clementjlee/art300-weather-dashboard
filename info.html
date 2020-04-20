@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Weather</title>
+
+        <script src="keys.js"></script>
+
+        <script src="https://unpkg.com/@warnick/forecast-js/js/forecast.min.js" defer></script>
+        <link rel="stylesheet" href="https://unpkg.com/@warnick/forecast-js/css/forecast.css">
+
+        <link rel="stylesheet" href="/style.css">
+    </head>
+
+    <body>
+        <div class="results" id="app">
+            <input placeholder="Enter Your ZIP Code" v-on:input="zip_trigger" name="name" id="zip" />
+
+
+            <h1>TIME</h1>
+            <p v-bind:class="time.day">{{time.day}}</p>
+            <p class="date">{{time.date}}</p>
+            <p class="time">{{time.hour_12}}:{{time.minute}}:{{time.seconds}} {{time.ampm}}</p>
+            <p v-bind:class="time.moom">{{time.moom}}</p>
+
+            <h1>META</h1>
+            <p class="city">{{city}}</p>
+
+            <p class="zip">{{location.zip}}</p>
+            <p class="latitude">{{location.coord.lat}}</p>
+            <p class="longitude">{{location.coord.lon}}</p>
+            <p class="city">{{location.name}}</p>
+            <p class="state">{{location.state}}</p>
+
+            <p>{{error}}</p>
+
+            <h1>CURRENT</h1>
+            <p class="description">{{current.description_main}}</p>
+            <p class="description_long">{{current.description_long}}</p>
+            <p class="icon">{{current.description_icon}}</p>
+
+            <p class="degree_symbol current">{{current.temp.current}}</p>
+            <p class="degree_symbol high">{{current.temp.high}}</p>
+            <p class="degree_symbol low">{{current.temp.low}}</p>
+
+            <p class="degree_symbol feelslike">{{current.temp.feelslike}}</p>
+            <p class="windspeed">{{current.wind.speed}}</p>
+            <p class="cloudcover">{{current.cloud_cover}}</p>
+
+            <p class="rain">{{current.rain}}</p>
+            <p class="snow">{{current.snow}}</p>
+
+            <p class="pressure">{{current.pressure}}</p>
+            <p class="humidity">{{current.humidity}}</p>
+
+            <p class="sunrise">{{current.sunrise}}</p>
+            <p class="sunset">{{current.sunset}}</p>
+
+            <p class="uv">{{current.uv}}</p>
+            <p class="air_quality">{{current.air_quality}}</p>
+
+
+
+            <h1>HOURLY</h1>
+            <h4>Hour 3</h4>
+            <p>{{hourly[2].isDaytime ? 'Day' : 'Night' }}</p>
+            <p>{{hourly[2].time}}</p>
+            <p>{{hourly[2].number}}</p>
+            <p>{{hourly[2].shortForecast}}</p>
+            <p>{{hourly[2].startTime}}</p>
+            <p class="degree_symbol">{{hourly[2].temperature}}</p>
+            <p>{{hourly[2].temperatureTrend}}</p>
+            <p>{{hourly[2].windSpeed}}</p>
+            <p>{{hourly[2].windDirection}}</p>
+
+            <h1>FORECAST</h1>
+            <h4>Day 2</h4>
+            <h6>{{forecast[1].weekday}}</h6>
+            <p>{{forecast[1].moon}}</p>
+            <p  class="degree_symbol">High - {{forecast[1].max_temp}}</p>
+            <p  class="degree_symbol">Low - {{forecast[1].min_temp}}</p>
+            <p>exmaple</p>
+            <p>{{ forecast[1].uv ? Math.round( forecast[1].uv ) : "" }}</p>
+            <p>{{ forecast[1].uv }}</p>
+            <p>{{ forecast[1].weather.description }}</p>
+
+            <p>{{forecast[1].description_icon}}</p>
+
+
+            <div class="icon">
+                <img v-bind:src="'/img/' + forecast[1].description_icon + '.png'" 
+                v-bind:alt="forecast[1].weather.description">
+            </div>
+
+            <div v-bind:class="'icon_'+forecast[1].description_icon" class="red"></div>
+
+            <p>{{forecast[1].wind_spd}} mph</p>
+            <p>{{forecast[1].wind_cdir_full}}</p>
+            <p>{{forecast[1].wind_cdir}}</p>
+
+            <p>{{forecast[1].vis}}</p>
+
+            <p>{{forecast[1].pop}}</p>
+
+            <p>{{forecast[1].precip}}</p>
+
+            <p>{{forecast[1].snow}}</p>
+
+            <p>{{forecast[1].dewpt}}</p>
+            <p>{{forecast[1].pres}} mb</p>
+
+            <div class="icon_01d "></div>
+            <div class="icon_02d "></div>
+            <div class="icon_03d "></div>
+            <div class="icon_04d "></div>
+            <div class="icon_09d "></div>
+            <div class="icon_10d "></div>
+            <div class="icon_11d "></div>
+            <div class="icon_13d "></div>
+            <div class="icon_50d "></div>
+            <div>
+                <img src="/img/03d.png" alt="">
+            </div>
+
+        </div>
+        <div id="map"></div>
+
+
+    </body>
+</html>
