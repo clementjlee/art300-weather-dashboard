@@ -1,5 +1,5 @@
 window.Keys = {
-    openweathermap: "3cdf479e439ecac7ccccdefe1bbf2d77",
-    weatherbit: "2edac0768bc54de6ab7b4512d410f8c3"
+    openweathermap: "1353ce455135f0854b82f1eb5532535c",
+    weatherbit: "eddcbfe31e62482fbf8aff540201ee81"
   };
   

@@ -44,7 +44,7 @@ input:focus, textarea:focus, select:focus{
     background-color: #205989;
     height: 5vw;
     grid-gap: 10px;
-    
+    width:100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin: auto;
@@ -62,7 +62,9 @@ input:focus, textarea:focus, select:focus{
 .time{
     background-color: #C4DBEF;
     display: grid;
+    margin: auto;
     grid-template-columns: repeat(3, 1fr);
+    width: 100%;
 }
 
     .todaydatetime{
@@ -200,6 +202,10 @@ input:focus, textarea:focus, select:focus{
     margin: 1vw;
 }
 
+.DayWeekday{
+    text-align: right;
+}
+
 .Dayrowone{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -209,6 +215,14 @@ input:focus, textarea:focus, select:focus{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
+}
+
+.Daytemperaturehigh{
+    font-size: 1vw;
+}
+
+.Daytemperaturelow{
+    font-size: 1vw;
 }
 
 .Dayrowthree{
@@ -235,12 +249,18 @@ input:focus, textarea:focus, select:focus{
 }
 
 #map {
-	width: 90vw;
-    height: 600px;
-    margin: 50px auto;
+	width: 100vw;
+    height: 50vw;
+    margin-top: 2vw;
+    padding: auto;
 }
 
-.footer{
-    background-color: red;
-    height: 5vw;
+.Footer{
+    background-color: #205989;
+    height: 1vw;
+    margin-top: 2vw;
+    text-align: center;
+    line-height: 2vw;
+    padding: 10vw;
+
 }
